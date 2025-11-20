@@ -15,23 +15,26 @@ function clampNumber(n, min = -1e12, max = 1e12) {
 }
 
 export default function App() {
-  // Shared helper for monthly rate
   const monthlyRate = (apr) => apr / 100 / 12
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+    <div id="top" className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
       <Header />
 
       <main className="relative">
-        <div className="absolute inset-0 bg-[radial-gradient(600px_circle_at_0%_0%,rgba(59,130,246,0.18),transparent_40%),radial-gradient(600px_circle_at_100%_0%,rgba(14,165,233,0.12),transparent_40%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(600px_circle_at_0%_0%,rgba(59,130,246,0.16),transparent_40%),radial-gradient(600px_circle_at_100%_0%,rgba(14,165,233,0.12),transparent_40%)] pointer-events-none" />
 
-        <section className="mx-auto max-w-7xl px-6 pt-10 pb-6">
+        <section id="hero" className="mx-auto max-w-7xl px-6 pt-10 pb-6">
           <div className="mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold">All-in-one finance calculators</h2>
-            <p className="text-blue-200/80 mt-2">Plan loans, savings, retirement, and more — fast and accurate.</p>
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">All-in-one finance calculators</h2>
+            <p className="text-blue-200/80 mt-3 max-w-2xl">Plan loans, savings, retirement, and more with instant results and friendly defaults. Built for speed, clarity, and confidence.</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a href="#pricing" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm shadow shadow-blue-600/30">Get Pro</a>
+              <a href="#calculators" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-900/70 hover:bg-slate-900 text-white text-sm border border-blue-500/20">Explore calculators</a>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div id="calculators" className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <LoanPaymentCalc />
             <SavingsGrowthCalc />
             <CompoundInterestCalc />
@@ -46,6 +49,30 @@ export default function App() {
         </section>
 
         <Pricing />
+
+        <section id="faq" className="py-16">
+          <div className="mx-auto max-w-5xl px-6">
+            <h3 className="text-2xl font-bold mb-6">Frequently asked questions</h3>
+            <div className="grid md:grid-cols-2 gap-6 text-blue-100/90 text-sm">
+              <div className="bg-slate-800/50 border border-blue-500/20 rounded-xl p-5">
+                <p className="font-semibold text-white mb-1">Are the calculations accurate?</p>
+                <p>Yes. We use standard financial formulas with sensible bounds to handle edge cases like 0% rates.</p>
+              </div>
+              <div className="bg-slate-800/50 border border-blue-500/20 rounded-xl p-5">
+                <p className="font-semibold text-white mb-1">Do I need an account?</p>
+                <p>No. Everything works out of the box. Pro adds cloud saves and exports.</p>
+              </div>
+              <div className="bg-slate-800/50 border border-blue-500/20 rounded-xl p-5">
+                <p className="font-semibold text-white mb-1">Will you add charts?</p>
+                <p>Yes—if you want visual breakdowns, we can add charts per calculator.</p>
+              </div>
+              <div className="bg-slate-800/50 border border-blue-500/20 rounded-xl p-5">
+                <p className="font-semibold text-white mb-1">Is my data saved?</p>
+                <p>All inputs stay in your browser unless you choose to save with Pro.</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <footer className="py-10">
           <div className="mx-auto max-w-7xl px-6 text-center text-blue-200/70 text-sm">
@@ -75,11 +102,11 @@ function LoanPaymentCalc() {
   }, [principal, apr, years])
 
   return (
-    <CalculatorCard title="Loan payment" description="Monthly payment and totals for any installment loan">
+    <CalculatorCard id="loan" title="Loan payment" description="Monthly payment and totals for any installment loan">
       <Input label="Loan amount" suffix="$" value={principal} onChange={(v)=>setPrincipal(clampNumber(v,0))} />
       <Input label="APR" suffix="%" value={apr} onChange={(v)=>setApr(clampNumber(v,0,100))} />
       <Input label="Term" suffix="years" value={years} onChange={(v)=>setYears(clampNumber(v,1,40))} />
-      <Result label="Monthly payment" value={formatCurrency(payment)} />
+      <Result label="Monthly payment" value={formatCurrency(payment)} accent />
       <Result label="Total interest" value={formatCurrency(totalInterest)} />
       <Result label="Total cost" value={formatCurrency(totalCost)} />
     </CalculatorCard>
@@ -103,12 +130,12 @@ function SavingsGrowthCalc() {
   }, [initial, monthly, rate, years])
 
   return (
-    <CalculatorCard title="Savings growth" description="Project savings with monthly contributions">
+    <CalculatorCard id="savings" title="Savings growth" description="Project savings with monthly contributions">
       <Input label="Starting balance" suffix="$" value={initial} onChange={(v)=>setInitial(clampNumber(v,0))} />
       <Input label="Monthly contribution" suffix="$" value={monthly} onChange={(v)=>setMonthly(clampNumber(v,0))} />
       <Input label="Interest rate" suffix="% APR" value={rate} onChange={(v)=>setRate(clampNumber(v,0,50))} />
       <Input label="Duration" suffix="years" value={years} onChange={(v)=>setYears(clampNumber(v,1,60))} />
-      <Result label="Future value" value={formatCurrency(future)} />
+      <Result label="Future value" value={formatCurrency(future)} accent />
       <Result label="Total contributions" value={formatCurrency(contributions)} />
       <Result label="Total interest" value={formatCurrency(interest)} />
     </CalculatorCard>
@@ -130,23 +157,22 @@ function CompoundInterestCalc() {
   }, [principal, rate, times, years])
 
   return (
-    <CalculatorCard title="Compound interest" description="Growth without additional contributions">
+    <CalculatorCard id="compound" title="Compound interest" description="Growth without additional contributions">
       <Input label="Principal" suffix="$" value={principal} onChange={(v)=>setPrincipal(clampNumber(v,0))} />
       <Input label="Annual rate" suffix="%" value={rate} onChange={(v)=>setRate(clampNumber(v,0,100))} />
       <Input label="Compounds per year" value={times} onChange={(v)=>setTimes(clampNumber(v,1,365))} />
       <Input label="Years" value={years} onChange={(v)=>setYears(clampNumber(v,1,100))} />
-      <Result label="Final amount" value={formatCurrency(amount)} />
+      <Result label="Final amount" value={formatCurrency(amount)} accent />
       <Result label="Total interest" value={formatCurrency(interest)} />
     </CalculatorCard>
   )
 }
 
 function MortgageAffordabilityCalc() {
-  const [income, setIncome] = useState(8000) // monthly gross
-  const [debts, setDebts] = useState(500) // other monthly debts
+  const [income, setIncome] = useState(8000)
+  const [debts, setDebts] = useState(500)
   const [apr, setApr] = useState(6.5)
   const [years, setYears] = useState(30)
-  // Rule of thumb: housing <= 28% of gross income, total debt <= 36%
   const { maxPayment, maxLoan } = useMemo(() => {
     const housingCap = income * 0.28
     const totalCap = income * 0.36 - debts
@@ -159,13 +185,13 @@ function MortgageAffordabilityCalc() {
   }, [income, debts, apr, years])
 
   return (
-    <CalculatorCard title="Mortgage affordability" description="Estimate the maximum loan based on income and debts">
+    <CalculatorCard id="mortgage" title="Mortgage affordability" description="Estimate the maximum loan based on income and debts">
       <Input label="Monthly gross income" suffix="$" value={income} onChange={(v)=>setIncome(clampNumber(v,0))} />
       <Input label="Other monthly debts" suffix="$" value={debts} onChange={(v)=>setDebts(clampNumber(v,0))} />
       <Input label="Mortgage APR" suffix="%" value={apr} onChange={(v)=>setApr(clampNumber(v,0,30))} />
       <Input label="Term" suffix="years" value={years} onChange={(v)=>setYears(clampNumber(v,1,40))} />
       <Result label="Max monthly payment" value={formatCurrency(maxPayment)} />
-      <Result label="Estimated max loan" value={formatCurrency(maxLoan)} />
+      <Result label="Estimated max loan" value={formatCurrency(maxLoan)} accent />
     </CalculatorCard>
   )
 }
@@ -191,7 +217,7 @@ function RetirementCalc() {
   }, [currentAge, retireAge, currentSavings, monthly, returnRate, inflation])
 
   return (
-    <CalculatorCard title="Retirement" description="Project your nest egg at retirement">
+    <CalculatorCard id="retirement" title="Retirement" description="Project your nest egg at retirement">
       <Input label="Current age" value={currentAge} onChange={(v)=>setCurrentAge(clampNumber(v,18,70))} />
       <Input label="Retire age" value={retireAge} onChange={(v)=>setRetireAge(clampNumber(v,30,80))} />
       <Input label="Current savings" suffix="$" value={currentSavings} onChange={(v)=>setCurrentSavings(clampNumber(v,0))} />
@@ -199,7 +225,7 @@ function RetirementCalc() {
       <Input label="Return" suffix="%/yr" value={returnRate} onChange={(v)=>setReturnRate(clampNumber(v,0,20))} />
       <Input label="Inflation" suffix="%/yr" value={inflation} onChange={(v)=>setInflation(clampNumber(v,0,10))} />
       <Result label="Projected (nominal)" value={formatCurrency(future)} />
-      <Result label="Projected (today's $)" value={formatCurrency(realFuture)} />
+      <Result label="Projected (today's $)" value={formatCurrency(realFuture)} accent />
     </CalculatorCard>
   )
 }
@@ -220,14 +246,13 @@ function DebtPayoffCalc() {
       intPaid += interestMonth
       b = b + interestMonth - payment
       if (b > 0 && b < payment) {
-        // final payment next month
         m += 1
         intPaid += b * r
         b = 0
         break
       }
       m += 1
-      if (payment <= interestMonth) { // payment too small
+      if (payment <= interestMonth) {
         m = Infinity
         break
       }
@@ -236,12 +261,12 @@ function DebtPayoffCalc() {
   }, [balance, apr, payment])
 
   return (
-    <CalculatorCard title="Debt payoff" description="Estimate months to zero with a fixed payment">
+    <CalculatorCard id="debt" title="Debt payoff" description="Estimate months to zero with a fixed payment">
       <Input label="Balance" suffix="$" value={balance} onChange={(v)=>setBalance(clampNumber(v,0))} />
       <Input label="APR" suffix="%" value={apr} onChange={(v)=>setApr(clampNumber(v,0,100))} />
       <Input label="Monthly payment" suffix="$" value={payment} onChange={(v)=>setPayment(clampNumber(v,0))} />
       <Result label="Months to payoff" value={Number.isNaN(months) ? '—' : `${months}`} />
-      <Result label="Total interest" value={Number.isNaN(interest) ? '—' : formatCurrency(interest)} />
+      <Result label="Total interest" value={Number.isNaN(interest) ? '—' : formatCurrency(interest)} accent />
     </CalculatorCard>
   )
 }
@@ -257,11 +282,11 @@ function RoiCalc() {
   }, [cost, gain])
 
   return (
-    <CalculatorCard title="ROI" description="Return on investment and profit">
+    <CalculatorCard id="roi" title="ROI" description="Return on investment and profit">
       <Input label="Cost" suffix="$" value={cost} onChange={(v)=>setCost(clampNumber(v,-1e9,1e9))} />
       <Input label="Final value" suffix="$" value={gain} onChange={(v)=>setGain(clampNumber(v,-1e9,1e9))} />
       <Result label="Profit" value={formatCurrency(roi.profit)} />
-      <Result label="ROI" value={`${roi.pct.toFixed(2)}%`} />
+      <Result label="ROI" value={`${roi.pct.toFixed(2)}%`} accent />
     </CalculatorCard>
   )
 }
@@ -278,12 +303,12 @@ function BreakEvenCalc() {
   }, [fixed, price, variable])
 
   return (
-    <CalculatorCard title="Break-even" description="Units and revenue to cover fixed costs">
+    <CalculatorCard id="breakeven" title="Break-even" description="Units and revenue to cover fixed costs">
       <Input label="Fixed costs" suffix="$" value={fixed} onChange={(v)=>setFixed(clampNumber(v,0))} />
       <Input label="Price per unit" suffix="$" value={price} onChange={(v)=>setPrice(clampNumber(v,0))} />
       <Input label="Variable cost per unit" suffix="$" value={variable} onChange={(v)=>setVariable(clampNumber(v,0))} />
       <Result label="Break-even units" value={Number.isNaN(units) ? '—' : `${units}`} />
-      <Result label="Break-even revenue" value={Number.isNaN(revenue) ? '—' : formatCurrency(revenue)} />
+      <Result label="Break-even revenue" value={Number.isNaN(revenue) ? '—' : formatCurrency(revenue)} accent />
     </CalculatorCard>
   )
 }
@@ -295,10 +320,10 @@ function EmergencyFundCalc() {
   const target = useMemo(() => monthly * months, [monthly, months])
 
   return (
-    <CalculatorCard title="Emergency fund" description="How much cash to keep for safety">
+    <CalculatorCard id="emergency" title="Emergency fund" description="How much cash to keep for safety">
       <Input label="Monthly expenses" suffix="$" value={monthly} onChange={(v)=>setMonthly(clampNumber(v,0))} />
       <Input label="Months of coverage" value={months} onChange={(v)=>setMonths(clampNumber(v,1,24))} />
-      <Result label="Target fund" value={formatCurrency(target)} />
+      <Result label="Target fund" value={formatCurrency(target)} accent />
     </CalculatorCard>
   )
 }
@@ -315,12 +340,12 @@ function InflationAdjusterCalc() {
   }, [amount, inflation, years])
 
   return (
-    <CalculatorCard title="Inflation adjuster" description="Convert between today's and future dollars">
+    <CalculatorCard id="inflation" title="Inflation adjuster" description="Convert between today's and future dollars">
       <Input label="Amount (today's $)" suffix="$" value={amount} onChange={(v)=>setAmount(clampNumber(v,0))} />
       <Input label="Inflation" suffix="%/yr" value={inflation} onChange={(v)=>setInflation(clampNumber(v,0,15))} />
       <Input label="Years" value={years} onChange={(v)=>setYears(clampNumber(v,0,60))} />
       <Result label="Future value" value={formatCurrency(future)} />
-      <Result label="Present value of $ {amount} in {years}y" value={formatCurrency(present)} />
+      <Result label={`Present value of ${formatCurrency(amount)} in ${years}y`} value={formatCurrency(present)} accent />
     </CalculatorCard>
   )
 }
